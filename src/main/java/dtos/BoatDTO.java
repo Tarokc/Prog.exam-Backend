@@ -21,12 +21,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class BoatDTO {
     private String boatname;
-    private String boatbrand;
     private String boatmake;
+    private String boatmodel;
 
     public BoatDTO(Boat boat) {
         this.boatname = boat.getName();
-        this.boatbrand = boat.getBrand();
         this.boatmake = boat.getMake();
+        this.boatmodel = boat.getModel();
     }
 }

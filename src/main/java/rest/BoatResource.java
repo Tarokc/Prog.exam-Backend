@@ -21,6 +21,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -39,6 +40,8 @@ public class BoatResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final BoatFacade BOAT_FACADE = BoatFacade.getInstance(EMF);
+    private static final OwnerFacade OWNER_FACADE = OwnerFacade.getInstance(EMF);
+
     
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
@@ -57,6 +60,16 @@ public class BoatResource {
     @GET
     public Response getAllBoats() {
         List<BoatDTO> boats = BOAT_FACADE.getAllBoats();
-        return Response.ok(GSON.toJson(boats)).build();
+        if (!boats.isEmpty()) {
+            return Response.ok(GSON.toJson(boats)).build();
+        }
+        return null;
+    }
+    
+    
+    @GET
+    @Path("/{name}")
+    public Response getOwnersByBoatname(@PathParam("name") String name) {
+        return Response.ok(GSON.toJson(OWNER_FACADE.getOwnerByBoatName(name))).build();
     }
 }

@@ -38,14 +38,10 @@ public class Owner implements Serializable {
     private String name;
     private String address;
     private String phone;
-    
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Boat> boats;
 
     public Owner(String name, String address, String phone) {
         this.name = name;
         this.address = address;
         this.phone = phone;
-        this.boats = new ArrayList();
     }    
 }

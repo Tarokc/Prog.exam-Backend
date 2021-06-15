@@ -6,12 +6,16 @@
 package facades;
 
 import dtos.OwnerDTO;
+import entities.Boat;
 import entities.Harbour;
 import entities.Owner;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -74,5 +78,43 @@ public class OwnerFacade {
         finally {
             em.close();
         }
+    }
+    
+    public int getOwnerId(String name) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Owner> q = em.createQuery("SELECT o FROM Owner o WHERE o.name = :name", Owner.class);
+            q.setParameter("name", name);
+            return q.getSingleResult().getId().intValue();
+        }
+        catch (NoResultException e) {
+            e.getMessage();
+        }
+        finally {
+            em.close();
+        }
+        return -1;
+    }
+    
+    public List<OwnerDTO> getOwnerByBoatName(String name) {
+        System.out.println(name);
+        BoatFacade bf = BoatFacade.getInstance(emf);
+        EntityManager em = emf.createEntityManager();
+        List<OwnerDTO> owners = new ArrayList();
+        List<Integer> boats = bf.getOwnerByBoatName(name);
+        System.out.println(boats.size());
+        try {
+        for (Integer id : boats) {
+            
+            TypedQuery<Owner> q = em.createQuery("SELECT o FROM Owner o where o.id = :id", Owner.class);
+            q.setParameter("id", id);
+            owners.add(new OwnerDTO(q.getSingleResult()));  
+        }
+        return owners;
+            
+        }
+        finally {
+            em.close();
+        } 
     }
 }

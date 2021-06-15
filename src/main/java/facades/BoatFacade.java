@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -38,15 +39,13 @@ public class BoatFacade {
         return instance;
     }
     
-    public Boat _create(String name, String make, String brand, List<Owner> owners, int harbour_id) {
+    public Boat _create(BoatDTO boatDTO) {
         EntityManager em = emf.createEntityManager();
         try {
          Boat boat = new Boat();
-         boat.setName(name);
-         boat.setBrand(brand);
-         boat.setMake(make);
-         boat.setOwners(owners);
-         boat.setHarbour_id(harbour_id);
+         boat.setName(boatDTO.getBoatname());
+         boat.setModel(boatDTO.getBoatmodel());
+         boat.setMake(boatDTO.getBoatmake());
          
          em.getTransaction().begin();
          em.persist(boat);
@@ -77,7 +76,7 @@ public class BoatFacade {
             Boat boat = new Boat();
             boat.setName(boatDTO.getBoatname());
             boat.setMake(boatDTO.getBoatmake());
-            boat.setBrand(boatDTO.getBoatbrand());
+            boat.setModel(boatDTO.getBoatmodel());
             
             em.getTransaction().begin();
             em.persist(boat);
@@ -103,12 +102,66 @@ public class BoatFacade {
         }
     }
     
-    public List<BoatDTO> getBoatsInHarbour(int harbord_id) {
+    public List<BoatDTO> getBoatsInHarbour(int harbour_id) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Boat> q = em.createQuery("SELECT b FROM Boat b WHERE b.harbour_id = :harbour_id", Boat.class);
-            q.setParameter("harbour_id", harbord_id);
+            q.setParameter("harbour_id", harbour_id);
             return q.getResultList().stream().map(BoatDTO::new).collect(Collectors.toList());
+        }
+        catch (NoResultException e) {
+            e.getMessage();
+        }
+        finally {
+            em.close();
+        }
+        return null;
+    }
+    
+    public BoatDTO connectHarbour(BoatDTO boatDTO, int harbour_id) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            Query q = em.createQuery("SELECT b FROM Boat b WHERE b.name = :name", Boat.class);
+            q.setParameter("name", boatDTO.getBoatname());
+            Boat boat = (Boat)q.getSingleResult();
+            boat.setHarbour_id(harbour_id);
+            
+            em.getTransaction().begin();
+            em.persist(boat);
+            em.getTransaction().commit();
+            return new BoatDTO(boat);
+        }
+        finally {
+            em.close();
+        }
+    }
+    
+    public BoatDTO setOwner(BoatDTO boatDTO, int owner_id) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            Query q = em.createQuery("SELECT b FROM Boat b WHERE b.name = :name", Boat.class);
+            q.setParameter("name", boatDTO.getBoatname());
+            Boat boat = (Boat)q.getSingleResult();
+            boat.setOwner_id(owner_id);
+            
+            em.getTransaction().begin();
+            em.persist(boat);
+            em.getTransaction().commit();
+            return new BoatDTO(boat);
+        }
+        finally {
+            em.close();
+        }
+    }
+    
+    public List<Integer> getOwnerByBoatName(String name) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query q = em.createQuery("SELECT b.owner_id FROM Boat b WHERE b.name = :name");
+            q.setParameter("name", name);
+            return q.getResultList();
         }
         finally {
             em.close();

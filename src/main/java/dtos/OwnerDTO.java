@@ -16,11 +16,10 @@ import java.util.List;
 public class OwnerDTO {
     private String name;
     private String phone;
-    private List boats;
 
+    
     public OwnerDTO(Owner owner) {
         this.name = owner.getName();
         this.phone = owner.getPhone();
-        this.boats = owner.getBoats();
     }
 }

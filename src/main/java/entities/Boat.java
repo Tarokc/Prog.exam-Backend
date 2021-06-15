@@ -35,21 +35,16 @@ public class Boat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String brand;
-    private String make;
     private String name;
+    private String make;
+    private String model;
     
-    @ManyToMany
-    @JoinColumn(name = "owner_id")
-    private List<Owner> owners;
-    
+    private int owner_id;
     private int harbour_id;
     
-    public Boat(String brand, String make, String name, int harbour_id) {
-        this.brand = brand;
-        this.make = make;
+    public Boat(String name, String make, String model) {
         this.name = name;
-        owners = new ArrayList();
-        this.harbour_id = harbour_id;
+        this.make = make;
+        this.model = model;
     }
 }

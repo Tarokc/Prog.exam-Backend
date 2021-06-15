@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -73,8 +74,12 @@ public class HarbourFacade {
             q.setParameter("name", name);
             return q.getSingleResult().getId().intValue();
         }
+        catch (NoResultException e) {
+            e.getMessage();
+        }
         finally {
             em.close();
         }
+        return -1;
     }
 }

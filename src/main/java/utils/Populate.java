@@ -2,6 +2,7 @@ package utils;
 
 
 import com.google.common.base.Strings;
+import dtos.BoatDTO;
 import entities.Boat;
 import entities.Harbour;
 import entities.Owner;
@@ -104,11 +105,14 @@ public class Populate {
         
         if (!boatFacade.getAllBoats().isEmpty()) return false;
         
-        Owner _owner = ownerFacade.getOwnerByName("Morten");
-        owners.add(_owner);
+        int _owner_id = ownerFacade.getOwnerId("Morten");
         int _harbour_id = harbourFacade.getHarbourId("Rodby");
+        Boat boat = new Boat("Lady Marmelade", "Ford", "WWI-spec Liberty V12");
+        BoatDTO boatDTO = new BoatDTO(boat);
         
-        boatFacade._create("Fisse", "Kusse", "Ford", owners, _harbour_id);
+        boatFacade._create(boatDTO);
+        boatFacade.connectHarbour(boatDTO, _harbour_id);
+        boatFacade.setOwner(boatDTO, _owner_id);
         return true;
     }
 }
