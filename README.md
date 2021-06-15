@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Dyrhoi/dat3-backend-startcode.svg?branch=master)](https://travis-ci.com/Dyrhoi/dat3-backend-startcode)
+[![Build Status](https://travis-ci.com/Tarokc/Prog.exam-Backend.svg?branch=master)](https://travis-ci.com/Tarokc/Prog.exam-Backend)
 
 ## Next Level backend start-code.
 *This project is meant as start code for projects, exercises and exam tasks given at 3rd semester at http://cphbusiness.dk in the Study Program "AP degree in Computer Science"*
