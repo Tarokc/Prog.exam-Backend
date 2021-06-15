@@ -2,6 +2,12 @@ package utils;
 
 
 import com.google.common.base.Strings;
+import entities.Boat;
+import entities.Harbour;
+import entities.Owner;
+import facades.BoatFacade;
+import facades.HarbourFacade;
+import facades.OwnerFacade;
 import facades.UserFacade;
 
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +31,12 @@ public class Populate {
         List<String> populated = new ArrayList<>();
         if(populateUsers())
             populated.add("users");
+        if(populateHarbours())
+            populated.add("harbours");
+        if(populateOwners())
+            populated.add("owners");
+        if(populateBoats())
+            populated.add("boats");
 
         return populated;
     }
@@ -59,4 +71,44 @@ public class Populate {
         return true;
     }
 
+    
+   public boolean populateHarbours() throws IllegalArgumentException {
+        HarbourFacade harbourFacade = HarbourFacade.getInstance(this.emf);
+        
+        if (!harbourFacade.getAllHarbours().isEmpty()) return false;
+        
+        harbourFacade._create("Rodby", "Rødby Færge", 25);
+        harbourFacade._create("Kobenhavn", "Island Brygge", 200);
+        harbourFacade._create("Skagen", "Havnevagtvej", 10);
+        
+        return true;
+    }
+    
+    public boolean populateOwners() {
+        OwnerFacade ownerFacade = OwnerFacade.getInstance(this.emf);
+        
+        if (!ownerFacade.getAllOwners().isEmpty()) return false;
+        
+        ownerFacade._create("user", "Kalvebod Fælled", "60600600");
+        ownerFacade._create("Morten", "Spasservej", "88888888");
+        ownerFacade._create("Peter", "Palandvej", "87654321");
+        
+        return true;
+    }
+    
+    public boolean populateBoats() {
+        BoatFacade boatFacade = BoatFacade.getInstance(emf);
+        OwnerFacade ownerFacade = OwnerFacade.getInstance(emf);
+        HarbourFacade harbourFacade = HarbourFacade.getInstance(emf);
+        List<Owner> owners = new ArrayList();
+        
+        if (!boatFacade.getAllBoats().isEmpty()) return false;
+        
+        Owner _owner = ownerFacade.getOwnerByName("Morten");
+        owners.add(_owner);
+        int _harbour_id = harbourFacade.getHarbourId("Rodby");
+        
+        boatFacade._create("Fisse", "Kusse", "Ford", owners, _harbour_id);
+        return true;
+    }
 }

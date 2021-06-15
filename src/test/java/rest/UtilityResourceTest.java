@@ -81,8 +81,6 @@ public class UtilityResourceTest {
                 .when()
                 .get("/util/populate").then()
                 .statusCode(200)
-                .body("populated", contains("users"));
+                .body("populated", contains("users", "harbours", "owners", "boats"));
     }
-
-
 }
