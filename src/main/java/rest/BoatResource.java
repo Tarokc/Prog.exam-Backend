@@ -64,15 +64,16 @@ public class BoatResource {
     }
     
     @GET
-    @Path("/{name}")
+    @Path("/name/{name}")
     public Response getOwnersByBoatname(@PathParam("name") String name) {
         List<OwnerDTO> owners = OWNER_FACADE.getOwnerByBoatName(name);
+        System.out.println(name);
         try {
             if (!owners.isEmpty()) {
                 return Response.ok(GSON.toJson(owners)).build();
             }
             else {
-                return Response.ok(GSON.toJson("No owners found")).build();
+                return Response.ok(GSON.toJson("No owner found")).build();
             }
         }
         catch (NullPointerException e) {
@@ -82,8 +83,8 @@ public class BoatResource {
     }
     
     @GET
-    @Path("/ownerless")
+    @Path("/harbourless")
     public Response getBoatsWithoutOwner() {
-        return Response.ok(GSON.toJson(BOAT_FACADE.getBoatsWithoutOwner())).build();
+        return Response.ok(GSON.toJson(BOAT_FACADE.getBoatsWithoutHarbour())).build();
     }
 }

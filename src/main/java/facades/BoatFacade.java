@@ -168,7 +168,7 @@ public class BoatFacade {
         }
     }
     
-    public List<BoatDTO> getBoatsWithoutOwner() {
+    public List<BoatDTO> getBoatsWithoutHarbour() {
         EntityManager em = emf.createEntityManager();
         try {
             Query q = em.createQuery("SELECT b FROM Boat b WHERE b.owner_id = 0");

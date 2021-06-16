@@ -67,7 +67,6 @@ public class OwnerFacade {
         }
     }        
     
-    
     public Owner getOwnerByName(String name) {
         EntityManager em = emf.createEntityManager();
         try {
