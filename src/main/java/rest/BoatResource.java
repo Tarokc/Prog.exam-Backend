@@ -72,4 +72,10 @@ public class BoatResource {
     public Response getOwnersByBoatname(@PathParam("name") String name) {
         return Response.ok(GSON.toJson(OWNER_FACADE.getOwnerByBoatName(name))).build();
     }
+    
+    @GET
+    @Path("/ownerless")
+    public Response getBoatsWithoutOwner() {
+        return Response.ok(GSON.toJson(BOAT_FACADE.getBoatsWithoutOwner())).build();
+    }
 }

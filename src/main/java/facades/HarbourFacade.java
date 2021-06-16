@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -81,5 +82,16 @@ public class HarbourFacade {
             em.close();
         }
         return -1;
+    }
+    
+    public List<String> getHarbourNames() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query q = em.createQuery("SELECT h.name FROM Harbour H");
+            return q.getResultList();            
+        }
+        finally {
+            em.close();
+        }
     }
 }

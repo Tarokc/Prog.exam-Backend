@@ -167,4 +167,27 @@ public class BoatFacade {
             em.close();
         }
     }
+    
+    public List<BoatDTO> getBoatsWithoutOwner() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query q = em.createQuery("SELECT b FROM Boat b WHERE b.owner_id = 0");
+            return q.getResultList();
+        }
+        finally {
+            em.close();
+        }
+    }
+    
+    public BoatDTO getBoat(String name) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Boat> q = em.createQuery("SELECT b FROm Boat b WHERE b.name = :name", Boat.class);
+            q.setParameter("name", name);
+            return new BoatDTO(q.getSingleResult());
+        }
+        finally {
+            em.close();
+        }
+    }
 }

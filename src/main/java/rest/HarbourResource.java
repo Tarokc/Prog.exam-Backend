@@ -7,6 +7,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.BoatDTO;
 import facades.BoatFacade;
 import facades.HarbourFacade;
 import facades.OwnerFacade;
@@ -46,7 +47,26 @@ public class HarbourResource {
     public Response getBoatsByHarbour(@PathParam("name") String name) {
         
         int harbour_id = HARBOUR_FACADE.getHarbourId(name);
+        System.out.println(name);
         
         return Response.ok(GSON.toJson(BOAT_FACADE.getBoatsInHarbour(harbour_id))).build();
+    }
+    
+    @GET
+    @Path("/names")
+    public Response getHarbourNames() {
+        return Response.ok(GSON.toJson(HARBOUR_FACADE.getHarbourNames())).build();
+    }
+    
+    @PUT
+    public Response connectBoat(String json) {
+        String harbour = json.split(",")[1];
+        harbour = harbour.substring(harbour.indexOf(":\"") + 2, harbour.lastIndexOf("\""));
+        int harbour_id = HARBOUR_FACADE.getHarbourId(harbour);
+        
+        String boat = json.substring(json.indexOf(":\"") + 2, json.indexOf("\","));
+        BoatDTO boatDTO = BOAT_FACADE.getBoat(boat);
+        BOAT_FACADE.connectHarbour(boatDTO, harbour_id);
+        return null;
     }
 }
