@@ -47,7 +47,6 @@ public class HarbourResource {
     public Response getBoatsByHarbour(@PathParam("name") String name) {
         
         int harbour_id = HARBOUR_FACADE.getHarbourId(name);
-        System.out.println(name);
         
         return Response.ok(GSON.toJson(BOAT_FACADE.getBoatsInHarbour(harbour_id))).build();
     }

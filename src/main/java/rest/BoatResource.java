@@ -8,6 +8,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.BoatDTO;
+import dtos.OwnerDTO;
 import facades.BoatFacade;
 import facades.OwnerFacade;
 import java.util.List;
@@ -41,18 +42,14 @@ public class BoatResource {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final BoatFacade BOAT_FACADE = BoatFacade.getInstance(EMF);
     private static final OwnerFacade OWNER_FACADE = OwnerFacade.getInstance(EMF);
-
-    
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
-    public BoatResource() {
-        
-    }
+    public BoatResource() {}
     
     @POST
     public Response register(String json) {
         BoatDTO newBoat = GSON.fromJson(json, BoatDTO.class);
-        System.out.println(json);
+
         newBoat = BOAT_FACADE.register(newBoat);
         return Response.ok(GSON.toJson(newBoat)).build();
     }
@@ -66,11 +63,22 @@ public class BoatResource {
         return null;
     }
     
-    
     @GET
     @Path("/{name}")
     public Response getOwnersByBoatname(@PathParam("name") String name) {
-        return Response.ok(GSON.toJson(OWNER_FACADE.getOwnerByBoatName(name))).build();
+        List<OwnerDTO> owners = OWNER_FACADE.getOwnerByBoatName(name);
+        try {
+            if (!owners.isEmpty()) {
+                return Response.ok(GSON.toJson(owners)).build();
+            }
+            else {
+                return Response.ok(GSON.toJson("No owners found")).build();
+            }
+        }
+        catch (NullPointerException e) {
+            e.getMessage();
+        }
+        return null;
     }
     
     @GET

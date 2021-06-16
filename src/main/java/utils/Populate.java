@@ -68,10 +68,8 @@ public class Populate {
 
         userFacade._create("user", password_user, new ArrayList<>());
         userFacade._create("admin", password_admin, Collections.singletonList("admin"));
-
         return true;
     }
-
     
    public boolean populateHarbours() throws IllegalArgumentException {
         HarbourFacade harbourFacade = HarbourFacade.getInstance(this.emf);
@@ -81,7 +79,6 @@ public class Populate {
         harbourFacade._create("Rodby", "Rødby Færge", 25);
         harbourFacade._create("Kobenhavn", "Island Brygge", 200);
         harbourFacade._create("Skagen", "Havnevagtvej", 10);
-        
         return true;
     }
     
@@ -93,7 +90,6 @@ public class Populate {
         ownerFacade._create("user", "Kalvebod Fælled", "60600600");
         ownerFacade._create("Morten", "Spasservej", "88888888");
         ownerFacade._create("Peter", "Palandvej", "87654321");
-        
         return true;
     }
     
@@ -101,7 +97,6 @@ public class Populate {
         BoatFacade boatFacade = BoatFacade.getInstance(emf);
         OwnerFacade ownerFacade = OwnerFacade.getInstance(emf);
         HarbourFacade harbourFacade = HarbourFacade.getInstance(emf);
-        List<Owner> owners = new ArrayList();
         
         if (!boatFacade.getAllBoats().isEmpty()) return false;
         

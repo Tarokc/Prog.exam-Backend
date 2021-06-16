@@ -97,12 +97,10 @@ public class OwnerFacade {
     }
     
     public List<OwnerDTO> getOwnerByBoatName(String name) {
-        System.out.println(name);
         BoatFacade bf = BoatFacade.getInstance(emf);
         EntityManager em = emf.createEntityManager();
         List<OwnerDTO> owners = new ArrayList();
         List<Integer> boats = bf.getOwnerByBoatName(name);
-        System.out.println(boats.size());
         try {
         for (Integer id : boats) {
             
@@ -112,9 +110,12 @@ public class OwnerFacade {
         }
         return owners;
             
+        } catch (NoResultException e) {
+            e.getMessage();
         }
         finally {
             em.close();
         } 
+        return null;
     }
 }
